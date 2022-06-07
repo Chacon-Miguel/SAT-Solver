@@ -11,7 +11,7 @@ sys.setrecursionlimit(10000)
 
 TEST_DIRECTORY = os.path.join(os.path.dirname(__file__), 'test_inputs')
 
-## HELPER FUNCTIONS
+# HELPER FUNCTIONS
 
 def _open_case(casename):
     with open(os.path.join(TEST_DIRECTORY, casename + ".json")) as f:
@@ -23,7 +23,7 @@ def _open_case(casename):
                  for variable, polarity in clause[::-1]]
                 for clause in cnf]
         rev_f = sorted(rev)
-        s_f = res[::-1]
+        s_f = res[: : -1]
         s_f_2 = sorted(res, key=len)
         return res, rev, rev_f, s_f, s_f_2
 
@@ -44,7 +44,7 @@ def _test_from_file(casename, testfunc):
         testfunc(cnf)
 
 
-## TESTS FOR SAT SOLVER
+# TESTS FOR SAT SOLVER
 
 def test_sat_small_nested_backtrack():
     cnf = [[("a",True), ("b",True)], [("a",False), ("b",False), ("c",True)],
@@ -199,7 +199,7 @@ def test_sat_sudoku3():
     _run_sudoku_test(3, original)
 
 
-## TESTS FOR SCHEDULING
+# TESTS FOR SCHEDULING
 
 def _open_scheduling_case(casename):
     with open(os.path.join(TEST_DIRECTORY, casename + ".json")) as f:
