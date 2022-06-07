@@ -6,11 +6,10 @@ import typing
 import doctest
 sys.setrecursionlimit(10000)
 # NO ADDITIONAL IMPORTS
-file = open('dd.txt', 'w')
 
 
-def simplify_formula(formula, var, assignment):
-    # unit_clause = None
+def simplify_formula(formula, variables, assignments, var, assignment):
+    unit_clause = None
     new_formula = []
     for clause in formula:
         new_clause = []
@@ -25,31 +24,18 @@ def simplify_formula(formula, var, assignment):
         if len(new_clause) == 0 and value != assignment:
             return None
         elif len(new_clause) > 0:
-            # if len(new_clause) == 1:
-            #     unit_clause = new_clause
+            if len(new_clause) == 1:
+                unit_clause = new_clause
             new_formula.append(new_clause)
     
-    # if unit_clause != None:
-    #     # print(unit_clause, variables)
-    #     # print()
-    #     variables.remove(unit_clause[0][0])
-    #     assignments[ unit_clause[0][0] ] = unit_clause[0][1]
-    #     new_formula = simplify_formula(new_formula, variables, assignments, unit_clause[0][0], unit_clause[0][1])
-    #     file.write(str(new_formula))
-    #     file.write(str(variables))
-    #     # file.write(str(assignments))
-    #     file.write('\n')
-    #     if new_formula == None:
-    #         variables.add( unit_clause[0][0] )
-    #         del assignments[ unit_clause[0][0] ]
+    if unit_clause != None:
+        variables.remove(unit_clause[0][0])
+        assignments[ unit_clause[0][0] ] = unit_clause[0][1]
+        new_formula = simplify_formula(new_formula, variables, assignments, unit_clause[0][0], unit_clause[0][1])
+    if new_formula == None:
+        variables.add( unit_clause[0][0] )
+        del assignments[ unit_clause[0][0] ]
     return new_formula
-
-def check_unit_clause(formula):
-    for clause in formula:
-        if len(clause) == 1:
-            pass
-
-    return formula
 
 def satisfying_assignment(formula):
     """
@@ -71,10 +57,10 @@ def satisfying_assignment(formula):
         if len(variables) == 0:
             return assignments
         
-        var = variables.pop()
+        var = variables.pop()        
         for val in vals:
             assignments[var] = val
-            new_formula = simplify_formula(formula, var, val)
+            new_formula = simplify_formula(formula, variables, assignments, var, val)
 
             if new_formula is None:
                 continue
